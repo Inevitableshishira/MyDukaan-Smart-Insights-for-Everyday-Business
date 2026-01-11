@@ -6,15 +6,22 @@ const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
 
 export const getBusinessInsights = async (data: BusinessData): Promise<string> => {
   const prompt = `
-    Critically analyze this business data and provide EXACTLY 3 short bullet points. 
-    Each bullet must be under 12 words. 
-    Focus on: 1. Top seller, 2. Financial health, 3. Critical stock warning.
-    No conversational filler.
+    As a Senior Business Analyst, critically evaluate this business data.
+    Provide exactly 3 bullet points of "Explainable Intelligence":
+    1. REVENUE VELOCITY: Contrast sales count against total stock. Is turnover healthy?
+    2. OVERHEAD LEAKAGE: Identify if expenses are eating into margins.
+    3. PRODUCT AGING: Name one specific product that needs more movement or a restock.
 
-    Data:
-    Inventory: ${JSON.stringify(data.products.map(p => ({ n: p.name, s: p.stock })))}
-    Sales: ${data.sales.length} records, Total Revenue: $${data.sales.reduce((a, b) => a + b.totalAmount, 0)}
-    Expenses: $${data.expenses.reduce((a, b) => a + b.amount, 0)}
+    Constraints: 
+    - Max 15 words per bullet.
+    - Use professional, punchy language.
+    - Focus on actionable figures.
+
+    Data Payload:
+    - Industry: ${data.settings.type}
+    - Inventory: ${JSON.stringify(data.products.map(p => ({ n: p.name, s: p.stock, min: p.minStockLevel })))}
+    - Total Revenue: ${data.settings.currency}${data.sales.reduce((a, b) => a + b.totalAmount, 0)}
+    - Total Outflows: ${data.settings.currency}${data.expenses.filter(e => e.type === 'outgoing').reduce((a, b) => a + b.amount, 0)}
   `;
 
   try {
@@ -22,14 +29,14 @@ export const getBusinessInsights = async (data: BusinessData): Promise<string> =
       model: 'gemini-3-flash-preview',
       contents: prompt,
       config: {
-        systemInstruction: "You are a ultra-concise business logic unit. Output ONLY 3 short bullet points. Highlight figures. Do not exceed 3 lines total.",
-        temperature: 0.3,
+        systemInstruction: "You are an expert business logic processor. Output ONLY 3 bullet points. No conversational greetings. Use the provided currency symbol.",
+        temperature: 0.2, // Lower temperature for more factual consistency
       }
     });
 
-    return response.text || "No insights available.";
+    return response.text || "AI analysis unavailable.";
   } catch (error) {
     console.error("Gemini Error:", error);
-    return "AI system offline.";
+    return "AI insights offline. Check API connectivity.";
   }
 };

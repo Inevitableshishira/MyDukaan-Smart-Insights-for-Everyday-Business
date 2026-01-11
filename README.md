@@ -1,4 +1,3 @@
-
 # 🛍️ MyDukaan: The Smart Business Terminal
 > **Smart Insights for Everyday Business...**
 
@@ -22,18 +21,30 @@
 - **Data Visualization**: Recharts (Custom Area and Pie charts)
 - **AI Engine**: Google Gemini 3 Flash (via @google/genai)
 - **Persistence**: LocalStorage API for offline-first capability
-- **Deployment**: Vercel (Edge Network Optimized)
+- **Deployment**: Netlify (Global CDN)
 
-## 📦 Deployment (Vercel)
+## 📦 Deployment (Netlify)
 
-This project is optimized for deployment on **Vercel**. 
+This project is optimized for deployment on **Netlify**.
 
-1. **Connect GitHub**: Import the repository to Vercel.
-2. **Environment Variables**: Add `API_KEY` in the Vercel Dashboard under Project Settings > Environment Variables.
-3. **Build Settings**: The project uses Vite. Vercel will auto-detect the configuration.
-   - Build Command: `npm run build`
-   - Output Directory: `dist`
-4. **Security**: Ensure you restrict your Google AI API key to your Vercel deployment domain in the Google Cloud Console for production security.
+1. **GitHub Connection**:
+   - Push your code to a GitHub repository.
+   - Log in to [Netlify.com](https://netlify.com) and click **"Add new site"** > **"Import an existing project"**.
+   - Select your repository.
+
+2. **Build Settings**:
+   - Netlify will auto-detect Vite settings:
+     - **Build Command**: `npm run build`
+     - **Publish Directory**: `dist`
+
+3. **Environment Variables** (Crucial for AI features):
+   - In the Netlify Dashboard, go to **Site Settings** > **Environment variables**.
+   - Click **"Add a variable"**.
+   - **Key**: `API_KEY`
+   - **Value**: (Paste your Google Gemini API Key here).
+
+4. **SSL & Custom Domains**:
+   - Netlify automatically provides an SSL certificate and a `.netlify.app` domain.
 
 ## 🧠 Design Philosophy
 I built **MyDukaan** with the goal of "Digital Minimalism." Small business owners often find enterprise software too complex. This app prioritizes speed—getting from "Item Entry" to "Sale Logged" in as few clicks as possible, while using AI to handle the complex task of data analysis.
