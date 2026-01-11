@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, PieChart, Pie, Cell, LineChart, Line } from 'recharts';
 import { BusinessData } from '../types';
@@ -7,9 +6,10 @@ import { TrendingUp, TrendingDown, Target, Activity } from 'lucide-react';
 interface ReportsViewProps {
   data: BusinessData;
   isDark: boolean;
+  currency: string;
 }
 
-const ReportsView: React.FC<ReportsViewProps> = ({ data, isDark }) => {
+const ReportsView: React.FC<ReportsViewProps> = ({ data, isDark, currency }) => {
   const totalSales = data.sales.reduce((acc, sale) => acc + sale.totalAmount, 0);
   const totalExpenses = data.expenses.reduce((acc, exp) => acc + exp.amount, 0);
   const netProfit = totalSales - totalExpenses;
@@ -72,7 +72,7 @@ const ReportsView: React.FC<ReportsViewProps> = ({ data, isDark }) => {
               <BarChart data={dailyReportData}>
                 <CartesianGrid strokeDasharray="3 3" vertical={false} stroke={isDark ? '#1e293b' : '#f1f5f9'} />
                 <XAxis dataKey="date" fontSize={10} fontWeight="bold" axisLine={false} tickLine={false} tick={{fill: '#64748b'}} />
-                <YAxis fontSize={10} fontWeight="bold" axisLine={false} tickLine={false} tickFormatter={(v) => `$${v}`} tick={{fill: '#64748b'}} />
+                <YAxis fontSize={10} fontWeight="bold" axisLine={false} tickLine={false} tickFormatter={(v) => `${currency}${v}`} tick={{fill: '#64748b'}} />
                 <Tooltip 
                   cursor={{fill: isDark ? '#1e293b' : '#f8fafc'}}
                   contentStyle={{ borderRadius: '16px', border: 'none', boxShadow: '0 10px 15px -3px rgb(0 0 0 / 0.1)', backgroundColor: isDark ? '#0f172a' : '#fff' }} 
@@ -112,7 +112,7 @@ const ReportsView: React.FC<ReportsViewProps> = ({ data, isDark }) => {
                     <div className="w-2.5 h-2.5 rounded-full" style={{ backgroundColor: COLORS[i % COLORS.length] }} />
                     <span className="text-xs font-bold text-slate-500 truncate max-w-[80px]">{p.name}</span>
                   </div>
-                  <span className={`text-xs font-black ${isDark ? 'text-white' : 'text-slate-900'}`}>${p.value}</span>
+                  <span className={`text-xs font-black ${isDark ? 'text-white' : 'text-slate-900'}`}>{currency}{p.value}</span>
                 </div>
               ))}
             </div>

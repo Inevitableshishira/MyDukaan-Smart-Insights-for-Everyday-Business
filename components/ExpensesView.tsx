@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { Receipt, Plus, Trash2, Calendar, Tag, CreditCard, X, TrendingUp, TrendingDown, Eraser, Filter, HandCoins } from 'lucide-react';
 import { Expense } from '../types';
@@ -10,9 +9,10 @@ interface ExpensesViewProps {
   businessType: string;
   isDark: boolean;
   compactMode?: boolean;
+  currency: string;
 }
 
-const ExpensesView: React.FC<ExpensesViewProps> = ({ expenses, onAddExpense, onClearLedger, businessType, isDark, compactMode }) => {
+const ExpensesView: React.FC<ExpensesViewProps> = ({ expenses, onAddExpense, onClearLedger, businessType, isDark, compactMode, currency }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [activeTab, setActiveTab] = useState<'all' | 'incoming' | 'outgoing'>('all');
   const [newEntry, setNewEntry] = useState({
@@ -66,19 +66,19 @@ const ExpensesView: React.FC<ExpensesViewProps> = ({ expenses, onAddExpense, onC
           <div className="flex items-center gap-2 mb-1 text-emerald-500">
             <TrendingUp size={16} /> <span className="text-[9px] uppercase font-black tracking-widest">Incoming</span>
           </div>
-          <h4 className="text-2xl font-black text-emerald-500">${incomeTotal.toLocaleString()}</h4>
+          <h4 className="text-2xl font-black text-emerald-500">{currency}{incomeTotal.toLocaleString()}</h4>
         </div>
         <div className={`p-6 rounded-[2rem] border ${isDark ? 'bg-slate-900 border-slate-800' : 'bg-white shadow-sm'}`}>
           <div className="flex items-center gap-2 mb-1 text-rose-500">
             <TrendingDown size={16} /> <span className="text-[9px] uppercase font-black tracking-widest">Outgoing</span>
           </div>
-          <h4 className="text-2xl font-black text-rose-500">${expenseTotal.toLocaleString()}</h4>
+          <h4 className="text-2xl font-black text-rose-500">{currency}{expenseTotal.toLocaleString()}</h4>
         </div>
         <div className={`p-6 rounded-[2rem] border text-white accent-bg shadow-xl`}>
           <div className="flex items-center gap-2 mb-1 opacity-80">
              <HandCoins size={16} /> <span className="text-[9px] uppercase font-black tracking-widest">Net Flow</span>
           </div>
-          <h4 className="text-2xl font-black">${(incomeTotal - expenseTotal).toLocaleString()}</h4>
+          <h4 className="text-2xl font-black">{currency}{(incomeTotal - expenseTotal).toLocaleString()}</h4>
         </div>
       </div>
 
@@ -114,7 +114,7 @@ const ExpensesView: React.FC<ExpensesViewProps> = ({ expenses, onAddExpense, onC
                   </td>
                   <td className={`${px} ${py}`}>
                     <span className={`font-black ${textSize} ${e.type === 'incoming' ? 'text-emerald-500' : 'text-rose-500'}`}>
-                      {e.type === 'incoming' ? '+' : '-'}${e.amount.toLocaleString(undefined, { minimumFractionDigits: 2 })}
+                      {e.type === 'incoming' ? '+' : '-'}{currency}{e.amount.toLocaleString(undefined, { minimumFractionDigits: 2 })}
                     </span>
                   </td>
                   <td className={`${px} ${py} text-right text-[9px] font-black text-slate-400`}>
@@ -151,7 +151,7 @@ const ExpensesView: React.FC<ExpensesViewProps> = ({ expenses, onAddExpense, onC
               </div>
               <div className="grid grid-cols-2 gap-4">
                 <div>
-                  <label className="text-[10px] font-black uppercase text-slate-400 mb-2 block ml-1">Valuation ($)</label>
+                  <label className="text-[10px] font-black uppercase text-slate-400 mb-2 block ml-1">Valuation ({currency})</label>
                   <input required type="number" step="0.01" value={newEntry.amount} onChange={e => setNewEntry({...newEntry, amount: parseFloat(e.target.value) || 0})} className="w-full p-4 border-2 rounded-2xl font-bold text-slate-800" />
                 </div>
                 <div>

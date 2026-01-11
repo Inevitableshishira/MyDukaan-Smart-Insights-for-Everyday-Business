@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { Users, Search, Plus, Mail, Phone, Calendar, UserPlus, X, Trash2, Eraser, UserX } from 'lucide-react';
 import { Customer } from '../types';
@@ -9,9 +8,10 @@ interface CustomersViewProps {
   onClearCustomers: () => void;
   isDark: boolean;
   compactMode?: boolean;
+  currency: string;
 }
 
-const CustomersView: React.FC<CustomersViewProps> = ({ customers, onAddCustomer, onClearCustomers, isDark, compactMode }) => {
+const CustomersView: React.FC<CustomersViewProps> = ({ customers, onAddCustomer, onClearCustomers, isDark, compactMode, currency }) => {
   const [searchTerm, setSearchTerm] = useState('');
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [newCustomer, setNewCustomer] = useState({
@@ -107,7 +107,7 @@ const CustomersView: React.FC<CustomersViewProps> = ({ customers, onAddCustomer,
                     </div>
                   </td>
                   <td className={`${px} ${py}`}>
-                    <span className={`text-lg font-black ${isDark ? 'text-emerald-400' : 'text-emerald-600'}`}>${c.totalSpent.toFixed(2)}</span>
+                    <span className={`text-lg font-black ${isDark ? 'text-emerald-400' : 'text-emerald-600'}`}>{currency}{c.totalSpent.toFixed(2)}</span>
                   </td>
                   <td className={`${px} ${py}`}>
                     <div className="flex items-center gap-2 text-[10px] font-black text-slate-400 uppercase tracking-widest bg-slate-500/5 px-4 py-2 rounded-xl inline-flex">

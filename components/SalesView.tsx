@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { ShoppingCart, ShoppingBag, Plus, RefreshCw, CheckCircle2 } from 'lucide-react';
 import { Product, Sale } from '../types';
@@ -7,9 +6,10 @@ interface SalesViewProps {
   products: Product[];
   onAddSale: (sale: Omit<Sale, 'id'>) => void;
   isDark: boolean;
+  currency: string;
 }
 
-const SalesView: React.FC<SalesViewProps> = ({ products, onAddSale, isDark }) => {
+const SalesView: React.FC<SalesViewProps> = ({ products, onAddSale, isDark, currency }) => {
   const [selectedProduct, setSelectedProduct] = useState('');
   const [qty, setQty] = useState(1);
   const [isSuccess, setIsSuccess] = useState(false);
@@ -82,7 +82,7 @@ const SalesView: React.FC<SalesViewProps> = ({ products, onAddSale, isDark }) =>
                     <option value="">Query item catalog...</option>
                     {products.map(p => (
                       <option key={p.id} value={p.id} disabled={p.stock <= 0}>
-                        {p.name} — ${p.salePrice.toFixed(2)} ({p.stock} Units)
+                        {p.name} — {currency}{p.salePrice.toFixed(2)} ({p.stock} Units)
                       </option>
                     ))}
                   </select>
@@ -128,18 +128,18 @@ const SalesView: React.FC<SalesViewProps> = ({ products, onAddSale, isDark }) =>
                   <div className="flex justify-between items-center pb-6 border-b border-slate-200 dark:border-slate-800">
                     <span className="text-slate-400 font-black uppercase text-[10px] tracking-[0.2em]">Gross Subtotal</span>
                     <span className={`font-black text-2xl ${isDark ? 'text-white' : 'text-slate-800'} tabular-nums`}>
-                      ${product ? (product.salePrice * qty).toFixed(2) : '0.00'}
+                      {currency}{product ? (product.salePrice * qty).toFixed(2) : '0.00'}
                     </span>
                   </div>
                   <div className="flex justify-between items-center">
                     <span className="text-slate-400 font-black uppercase text-[10px] tracking-[0.2em]">Applicable Tax</span>
-                    <span className={`font-black text-sm text-slate-500`}>$0.00</span>
+                    <span className={`font-black text-sm text-slate-500`}>{currency}0.00</span>
                   </div>
                 </div>
                 <div className="pt-10">
                   <span className="text-indigo-600 font-black uppercase tracking-[0.3em] text-[10px] mb-2 block">Terminal Net Total</span>
                   <span className="text-6xl font-black text-indigo-600 tabular-nums tracking-tighter">
-                    ${product ? (product.salePrice * qty).toFixed(2) : '0.00'}
+                    {currency}{product ? (product.salePrice * qty).toFixed(2) : '0.00'}
                   </span>
                 </div>
               </div>
