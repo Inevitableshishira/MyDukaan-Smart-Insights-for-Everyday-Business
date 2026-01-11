@@ -5,11 +5,11 @@ import { BusinessData } from '../types';
 
 interface StatsGridProps {
   data: BusinessData;
+  currency: string;
 }
 
-const StatsGrid: React.FC<StatsGridProps> = ({ data }) => {
+const StatsGrid: React.FC<StatsGridProps> = ({ data, currency }) => {
   const isDark = data.settings.theme === 'dark';
-  const currency = data.settings.currency || '₹';
   const totalSales = data.sales.reduce((acc, sale) => acc + sale.totalAmount, 0);
   const totalExpenses = data.expenses.reduce((acc, exp) => acc + exp.amount, 0);
   const lowStockCount = data.products.filter(p => p.stock <= p.minStockLevel).length;

@@ -10,11 +10,11 @@ interface DashboardViewProps {
   insights: string;
   loadingInsights: boolean;
   onFetchInsights: () => void;
+  currency: string;
 }
 
-const DashboardView: React.FC<DashboardViewProps> = ({ data, insights, loadingInsights, onFetchInsights }) => {
+const DashboardView: React.FC<DashboardViewProps> = ({ data, insights, loadingInsights, onFetchInsights, currency }) => {
   const isDark = data.settings.theme === 'dark';
-  const currency = data.settings.currency || '₹';
   
   return (
     <div className="space-y-10 animate-in fade-in slide-in-from-bottom-6 duration-700 ease-out pb-12">
@@ -38,7 +38,7 @@ const DashboardView: React.FC<DashboardViewProps> = ({ data, insights, loadingIn
         </button>
       </div>
 
-      <StatsGrid data={data} />
+      <StatsGrid data={data} currency={currency} />
 
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
         <div className={`lg:col-span-8 ${isDark ? 'bg-slate-900 border-slate-800 shadow-black/40' : 'bg-white border-slate-100 shadow-slate-200/50'} p-8 rounded-[3rem] shadow-2xl border transition-all duration-500`}>

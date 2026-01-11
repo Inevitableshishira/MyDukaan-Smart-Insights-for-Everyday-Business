@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect, useCallback } from 'react';
 import Sidebar from './components/Sidebar';
 import DashboardView from './components/DashboardView';
@@ -116,6 +117,12 @@ const App: React.FC = () => {
     setData(prev => ({ ...prev, customers: [...prev.customers, { ...customer, id: `c${Date.now()}` }] }));
   }, []);
 
+  const handleClearCustomers = useCallback(() => {
+    if (window.confirm('Wipe all customer records from the directory?')) {
+      setData(prev => ({ ...prev, customers: [] }));
+    }
+  }, []);
+
   const handleAddExpense = useCallback((expense: Omit<Expense, 'id'>) => {
     setData(prev => ({ ...prev, expenses: [...prev.expenses, { ...expense, id: `e${Date.now()}` }] }));
   }, []);
@@ -180,11 +187,11 @@ const App: React.FC = () => {
           )}
           
           <div className="max-w-[1400px] mx-auto">
-            {view === 'dashboard' && <DashboardView data={data} insights={insights} loadingInsights={loadingInsights} onFetchInsights={fetchInsights} />}
+            {view === 'dashboard' && <DashboardView data={data} insights={insights} loadingInsights={loadingInsights} onFetchInsights={fetchInsights} currency={currency} />}
             {view === 'inventory' && <InventoryView products={data.products} businessType={data.settings.type} onAddProduct={handleAddProduct} onUpdateProduct={handleUpdateProduct} onDeleteProduct={handleDeleteProduct} isDark={isDark} compactMode={isCompact} currency={currency} />}
             {view === 'sales' && <SalesView products={data.products} onAddSale={handleAddSale} isDark={isDark} currency={currency} />}
             {view === 'reports' && <ReportsView data={data} isDark={isDark} currency={currency} />}
-            {view === 'customers' && <CustomersView customers={data.customers} onAddCustomer={handleAddCustomer} onClearCustomers={() => {}} isDark={isDark} compactMode={isCompact} currency={currency} />}
+            {view === 'customers' && <CustomersView customers={data.customers} onAddCustomer={handleAddCustomer} onClearCustomers={handleClearCustomers} isDark={isDark} compactMode={isCompact} currency={currency} />}
             {view === 'expenses' && <ExpensesView expenses={data.expenses} onAddExpense={handleAddExpense} onClearLedger={handleClearLedger} businessType={data.settings.type} isDark={isDark} compactMode={isCompact} currency={currency} />}
             {view === 'settings' && <SettingsView settings={data.settings} onUpdateSettings={handleUpdateSettings} isDark={isDark} />}
           </div>
